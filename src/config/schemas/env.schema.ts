@@ -2,8 +2,12 @@ import z from "zod";
 import { baseSchema } from "./base.schema";
 import { jwtSchema } from "./jwt.schema";
 import { authSchema } from "./auth.schema";
+import { mailerSchema } from "./mailer.schema";
 
-export const envSehema = baseSchema.and(jwtSchema).and(authSchema);
+export const envSehema = baseSchema
+  .and(jwtSchema)
+  .and(authSchema)
+  .and(mailerSchema);
 
 export type EnvConfig = z.infer<typeof envSehema>;
 

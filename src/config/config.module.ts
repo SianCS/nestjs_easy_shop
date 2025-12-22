@@ -4,6 +4,7 @@ import { validate } from "./schemas/env.schema";
 import { JwtConfigService } from "./services/jwt-config.service";
 import { AuthConfigService } from "./services/auth-config.service";
 import { AppConfigService } from "./services/app-config.service";
+import { MailerConfigService } from "./services/mailer-config.service";
 
 @Global()
 @Module({
@@ -12,7 +13,12 @@ import { AppConfigService } from "./services/app-config.service";
       validate,
     }),
   ],
-  providers: [JwtConfigService, AuthConfigService, AppConfigService],
+  providers: [
+    JwtConfigService,
+    AuthConfigService,
+    AppConfigService,
+    MailerConfigService,
+  ],
   exports: [JwtConfigService, AuthConfigService, AppConfigService],
 })
 export class ConfigModule {}
