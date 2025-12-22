@@ -1,8 +1,9 @@
 import z from "zod";
 import { baseSchema } from "./base.schema";
 import { jwtSchema } from "./jwt.schema";
+import { authSchema } from "./auth.schema";
 
-export const envSehema = baseSchema.and(jwtSchema);
+export const envSehema = baseSchema.and(jwtSchema).and(authSchema);
 
 export type EnvConfig = z.infer<typeof envSehema>;
 
