@@ -5,7 +5,7 @@ import {
   PROVIDER,
   PROVIDER_TYPE,
 } from "src/common/constants/provider-account.constant";
-import { prismaErrorCode } from "src/database/constants/prisma-error-code";
+import { PRISMA_ERROR_CODE } from "src/database/constants/prisma-error-code";
 import { PrismaService } from "src/database/prisma.service";
 import { BcryptService } from "src/shared/security/services/bcrypt.service";
 import { EmailAlreadyExistException } from "./exceptions/email-already-exist.exception";
@@ -27,8 +27,8 @@ export class UsersService {
           ...registerDto,
           providerAccounts: {
             create: {
-              type: PROVIDER_TYPE.CREDENTIAL,
-              provider: PROVIDER.CREDENTIAL,
+              type: PROVIDER_TYPE.CREDENTIALS,
+              provider: PROVIDER.CREDENTIALS,
               providerId: registerDto.email,
             },
           },
@@ -38,7 +38,7 @@ export class UsersService {
     } catch (error) {
       if (
         error instanceof PrismaClientKnownRequestError &&
-        error.code === prismaErrorCode.UNIQUE_CONSTRAINT_FAILED
+        error.code === PRISMA_ERROR_CODE.UNIQUE_CONSTRAINT_FAILED
       ) {
         throw new EmailAlreadyExistException();
       }

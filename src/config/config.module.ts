@@ -19,6 +19,11 @@ import { MailerConfigService } from "./services/mailer-config.service";
     AppConfigService,
     MailerConfigService,
   ],
-  exports: [JwtConfigService, AuthConfigService, AppConfigService],
+  exports: [
+    JwtConfigService,
+    AuthConfigService,
+    AppConfigService,
+    MailerConfigService,
+  ],
 })
 export class ConfigModule {}

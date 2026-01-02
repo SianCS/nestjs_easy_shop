@@ -7,9 +7,9 @@ import { BaseHttpException } from "src/common/exceptions/base-http.exception";
 
 export class EmailAlreadyExistException extends BaseHttpException {
   readonly statusCode: HttpStatus = HttpStatus.CONFLICT;
-  readonly errorCode: ErrorCode = ERROR_CODE.EMAIL_ALREADY_EXISTS;
+  readonly errorCode: ErrorCode = ERROR_CODE.EMAIL_ALREADY_EXIST;
 
   constructor() {
-    super("Email already exists");
+    super("Email already registered");
   }
 }

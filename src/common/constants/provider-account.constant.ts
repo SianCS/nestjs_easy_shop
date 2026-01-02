@@ -1,10 +1,10 @@
 export const PROVIDER_TYPE = {
-  CREDENTIAL: "credential",
+  CREDENTIALS: "credentials",
   OAUTH: "oauth",
 };
 
 export const PROVIDER = {
-  CREDENTIAL: "credential",
+  CREDENTIALS: "credentials",
   GOOGLE: "google",
 };
 
