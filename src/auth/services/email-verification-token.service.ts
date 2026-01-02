@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { EmailVerificationToken } from "@prisma/client";
 import { AuthConfigService } from "src/config/services/auth-config.service";
 import { PrismaService } from "src/database/prisma.service";
 import { CryptoService } from "src/shared/security/services/crypto.service";
@@ -13,7 +14,7 @@ export class EmailVerificationTokenService {
 
   async create(userId: string): Promise<string> {
     const token = this.cryptoService.randomString();
-    await this.prisma.emailValidationToken.create({
+    await this.prisma.emailVerificationToken.create({
       data: {
         userId,
         token,
@@ -23,5 +24,17 @@ export class EmailVerificationTokenService {
       },
     });
     return token;
+  }
+
+  findByToken(token: string): Promise<EmailVerificationToken | null> {
+    return this.prisma.emailVerificationToken.findUnique({
+      where: { token },
+    });
+  }
+
+  async delete(userId: string): Promise<void> {
+    await this.prisma.emailVerificationToken.deleteMany({
+      where: { userId },
+    });
   }
 }

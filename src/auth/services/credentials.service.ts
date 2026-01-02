@@ -5,7 +5,8 @@ import { EmailVerificationTokenService } from "./email-verification-token.servic
 import { AppConfigService } from "src/config/services/app-config.service";
 import { FRONTEND_ROUTE } from "src/common/constants/froentend-route.constant";
 import { EmailService } from "src/shared/email/email.service";
-
+import { InvalidVerificationToken } from "../exceptions/invalid-verification-token.exception";
+import { User } from "@prisma/client";
 @Injectable()
 export class CredentialsService {
   constructor(
@@ -17,6 +18,39 @@ export class CredentialsService {
 
   async register(registerDto: RegisterDto): Promise<void> {
     const user = await this.usersService.createByCredentials(registerDto);
+    await this.sendVerificationEmail(user);
+  }
+
+  async confirmEmail(token: string): Promise<void> {
+    const emailValidationToken =
+      await this.emailVerificationTokenService.findByToken(token);
+    if (!emailValidationToken) {
+      throw new InvalidVerificationToken();
+    }
+    void this.emailVerificationTokenService.delete(emailValidationToken.userId);
+
+    if (emailValidationToken.expiresAt < new Date()) {
+      throw new InvalidVerificationToken();
+    }
+
+    await this.usersService.update(emailValidationToken.userId, {
+      emailVerified: new Date(),
+    });
+  }
+
+  async resendVerificationEmail(email: string): Promise<void> {
+    const user =
+      await this.usersService.findByEmailIncludeVerificationToken(email);
+    if (!user) return;
+    if (user.emailVerified) return;
+
+    if (user.emailVerificationToken) {
+      void this.emailVerificationTokenService.delete(user.id);
+    }
+    await this.sendVerificationEmail(user);
+  }
+
+  private async sendVerificationEmail(user: User): Promise<void> {
     const token = await this.emailVerificationTokenService.create(user.id);
     const link = `${this.appConfig.frontendUrl}/${FRONTEND_ROUTE.AUTH.CONFIRM}?token=${token}`;
     this.emailService.sendConfirmationEmail(user.email, link).catch((error) => {

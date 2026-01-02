@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "@prisma/client";
+import { EmailVerificationToken, User } from "@prisma/client";
 import { RegisterDto } from "src/auth/dtos/register.dto";
 import {
   PROVIDER,
@@ -10,6 +10,7 @@ import { PrismaService } from "src/database/prisma.service";
 import { BcryptService } from "src/shared/security/services/bcrypt.service";
 import { EmailAlreadyExistException } from "./exceptions/email-already-exist.exception";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { UserUpdateInput } from "./types/input.type";
 
 @Injectable()
 export class UsersService {
@@ -44,5 +45,23 @@ export class UsersService {
       }
       throw error;
     }
+  }
+
+  update(id: string, data: UserUpdateInput): Promise<User> {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  findByEmailIncludeVerificationToken(
+    email: string,
+  ): Promise<
+    (User & { emailVerificationToken: EmailVerificationToken | null }) | null
+  > {
+    return this.prisma.user.findUnique({
+      where: { email },
+      include: { emailVerificationToken: true },
+    });
   }
 }

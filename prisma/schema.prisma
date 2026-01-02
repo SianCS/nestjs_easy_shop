@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output = "../generated/prisma"
 }
 
 datasource db {
@@ -20,11 +21,11 @@ model User {
   image                 String?
   createdAt             DateTime              @default(now()) @db.Timestamp()
   updatedAt             DateTime              @updatedAt @db.Timestamp()
-  emailValidationTokens EmailValidationToken?
+  emailVerificationToken EmailVerificationToken?
   providerAccounts      ProviderAccount[]
 }
 
-model EmailValidationToken {
+model EmailVerificationToken {
   userId    String   @id @db.Uuid
   token     String   @unique
   expiresAt DateTime @db.Timestamp()
