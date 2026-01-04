@@ -5,7 +5,7 @@ import { EmailVerificationTokenService } from "./email-verification-token.servic
 import { AppConfigService } from "src/config/services/app-config.service";
 import { FRONTEND_ROUTE } from "src/common/constants/froentend-route.constant";
 import { EmailService } from "src/shared/email/email.service";
-import { InvalidVerificationToken } from "../exceptions/invalid-verification-token.exception";
+import { InvalidVerificationTokenException } from "../exceptions/invalid-verification-token.exception";
 import { User } from "@prisma/client";
 import { LoginDto } from "../dtos/login.dto";
 import { LoginResponseDto } from "../dtos/login-response.dto";
@@ -33,12 +33,12 @@ export class CredentialsService {
     const emailValidationToken =
       await this.emailVerificationTokenService.findByToken(token);
     if (!emailValidationToken) {
-      throw new InvalidVerificationToken();
+      throw new InvalidVerificationTokenException();
     }
     void this.emailVerificationTokenService.delete(emailValidationToken.userId);
 
     if (emailValidationToken.expiresAt < new Date()) {
-      throw new InvalidVerificationToken();
+      throw new InvalidVerificationTokenException();
     }
 
     await this.usersService.update(emailValidationToken.userId, {

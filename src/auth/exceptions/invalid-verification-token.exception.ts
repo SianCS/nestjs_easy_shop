@@ -5,7 +5,7 @@ import {
 } from "src/common/constants/error-code.constant";
 import { BaseHttpException } from "src/common/exceptions/base-http.exception";
 
-export class InvalidVerificationToken extends BaseHttpException {
+export class InvalidVerificationTokenException extends BaseHttpException {
   readonly statusCode: HttpStatus = HttpStatus.BAD_REQUEST;
   readonly errorCode: ErrorCode = ERROR_CODE.INVALID_VERIFICATION_TOKEN;
 
