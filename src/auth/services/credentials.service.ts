@@ -12,6 +12,7 @@ import { LoginResponseDto } from "../dtos/login-response.dto";
 import { InvalidCredentialsException } from "../exceptions/invalid-credentials.exception";
 import { BcryptService } from "src/shared/security/services/bcrypt.service";
 import { EmailNotVerifiedException } from "../exceptions/email-notveridied.exception";
+import { AuthTokenService } from "src/shared/security/services/auth-token.service";
 @Injectable()
 export class CredentialsService {
   constructor(
@@ -20,6 +21,7 @@ export class CredentialsService {
     private readonly appConfig: AppConfigService,
     private readonly emailService: EmailService,
     private readonly bcryptService: BcryptService,
+    private readonly authTokenService: AuthTokenService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<void> {
@@ -83,5 +85,13 @@ export class CredentialsService {
     if (!user.emailVerified) {
       throw new EmailNotVerifiedException();
     }
+    const { email, id, role } = user;
+    const access_token = await this.authTokenService.sign({
+      email,
+      role,
+      sub: id,
+    });
+
+    return { access_token };
   }
 }

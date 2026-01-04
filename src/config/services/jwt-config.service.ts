@@ -10,8 +10,8 @@ export class JwtConfigService {
     return this.configService.get("ACCESS_JWT_SECRET", { infer: true });
   }
 
-  get accessJwtExpirationTime() {
-    return this.configService.get("ACCESS_JWT_EXPIRATION_TIME", {
+  get accessJwtTtl() {
+    return this.configService.get("ACCESS_JWT_TTL", {
       infer: true,
     });
   }
