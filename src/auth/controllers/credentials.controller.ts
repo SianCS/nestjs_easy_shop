@@ -1,10 +1,12 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { RegisterDto } from "../dtos/register.dto";
 import { CredentialsService } from "../services/credentials.service";
-import { MessageResponse } from "src/common/types/response.type";
+import { DataResponse, MessageResponse } from "src/common/types/response.type";
 import { ConfirmEmailDto } from "../dtos/confirm-email.dto";
-import { ResendVerificationEmailDto } from "../dtos/resend-verification-email.dto";
-
+import { EmailDto } from "../dtos/email.dto";
+import { LoginDto } from "../dtos/login.dto";
+import { LoginResponseDto } from "../dtos/login-response.dto";
+import { ApiOkResponse } from "@nestjs/swagger";
 @Controller("auth")
 export class CredentialsController {
   constructor(private readonly credentialsService: CredentialsService) {}
@@ -27,11 +29,19 @@ export class CredentialsController {
   @HttpCode(HttpStatus.OK)
   @Post("resend")
   async resendVerificationEmail(
-    @Body() resendVerificationEmailDto: ResendVerificationEmailDto,
+    @Body() emailDto: EmailDto,
   ): Promise<MessageResponse> {
-    await this.credentialsService.resendVerificationEmail(
-      resendVerificationEmailDto.email,
-    );
+    await this.credentialsService.resendVerificationEmail(emailDto.email);
     return { message: "Verification email resent successfully" };
+  }
+
+  @ApiOkResponse({ type: LoginResponseDto })
+  @HttpCode(HttpStatus.OK)
+  @Post("login")
+  async login(
+    @Body() loginDto: LoginDto,
+  ): Promise<DataResponse<LoginResponseDto>> {
+    const data = await this.credentialsService.login(loginDto);
+    return { data };
   }
 }

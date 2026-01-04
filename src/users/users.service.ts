@@ -64,4 +64,10 @@ export class UsersService {
       include: { emailVerificationToken: true },
     });
   }
+
+  findByEmail(email: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
 }

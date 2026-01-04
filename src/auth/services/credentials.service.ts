@@ -7,6 +7,11 @@ import { FRONTEND_ROUTE } from "src/common/constants/froentend-route.constant";
 import { EmailService } from "src/shared/email/email.service";
 import { InvalidVerificationToken } from "../exceptions/invalid-verification-token.exception";
 import { User } from "@prisma/client";
+import { LoginDto } from "../dtos/login.dto";
+import { LoginResponseDto } from "../dtos/login-response.dto";
+import { InvalidCredentialsException } from "../exceptions/invalid-credentials.exception";
+import { BcryptService } from "src/shared/security/services/bcrypt.service";
+import { EmailNotVerifiedException } from "../exceptions/email-notveridied.exception";
 @Injectable()
 export class CredentialsService {
   constructor(
@@ -14,6 +19,7 @@ export class CredentialsService {
     private readonly emailVerificationTokenService: EmailVerificationTokenService,
     private readonly appConfig: AppConfigService,
     private readonly emailService: EmailService,
+    private readonly bcryptService: BcryptService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<void> {
@@ -56,5 +62,26 @@ export class CredentialsService {
     this.emailService.sendConfirmationEmail(user.email, link).catch((error) => {
       console.log(error);
     });
+  }
+
+  async login(loginDto: LoginDto): Promise<LoginResponseDto> {
+    const user = await this.usersService.findByEmailIncludeVerificationToken(
+      loginDto.email,
+    );
+    if (!user || !user.password) {
+      throw new InvalidCredentialsException();
+    }
+
+    const isMatch = await this.bcryptService.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!isMatch) {
+      throw new InvalidCredentialsException();
+    }
+    if (!user.emailVerified) {
+      throw new EmailNotVerifiedException();
+    }
   }
 }
