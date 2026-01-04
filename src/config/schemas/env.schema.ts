@@ -3,11 +3,13 @@ import { baseSchema } from "./base.schema";
 import { jwtSchema } from "./jwt.schema";
 import { authSchema } from "./auth.schema";
 import { mailerSchema } from "./mailer.schema";
+import { googleSehema } from "./google.schema";
 
 export const envSehema = baseSchema
   .and(jwtSchema)
   .and(authSchema)
-  .and(mailerSchema);
+  .and(mailerSchema)
+  .and(googleSehema);
 
 export type EnvConfig = z.infer<typeof envSehema>;
 

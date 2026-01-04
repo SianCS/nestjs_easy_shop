@@ -5,6 +5,7 @@ import { JwtConfigService } from "./services/jwt-config.service";
 import { AuthConfigService } from "./services/auth-config.service";
 import { AppConfigService } from "./services/app-config.service";
 import { MailerConfigService } from "./services/mailer-config.service";
+import { GoogleConfigService } from "./services/google-config.service";
 
 @Global()
 @Module({
@@ -18,12 +19,14 @@ import { MailerConfigService } from "./services/mailer-config.service";
     AuthConfigService,
     AppConfigService,
     MailerConfigService,
+    GoogleConfigService,
   ],
   exports: [
     JwtConfigService,
     AuthConfigService,
     AppConfigService,
     MailerConfigService,
+    GoogleConfigService,
   ],
 })
 export class ConfigModule {}
