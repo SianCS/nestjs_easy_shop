@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { EmailVerificationToken, User } from "@prisma/client";
 import { RegisterDto } from "src/auth/dtos/register.dto";
 import {
+  Provider,
   PROVIDER,
   PROVIDER_TYPE,
 } from "src/common/constants/provider-account.constant";
@@ -11,6 +12,7 @@ import { BcryptService } from "src/shared/security/services/bcrypt.service";
 import { EmailAlreadyExistException } from "./exceptions/email-already-exist.exception";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { UserUpdateInput } from "./types/input.type";
+import { ProviderAccount } from "generated/prisma";
 
 @Injectable()
 export class UsersService {
@@ -68,6 +70,36 @@ export class UsersService {
   findByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: { email },
+    });
+  }
+
+  findByEmailIncludeProviderAccount(
+    email: string,
+    provider: Provider,
+  ): Promise<(User & { providerAccounts: ProviderAccount[] }) | null> {
+    return this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        providerAccounts: {
+          where: { provider },
+        },
+      },
+    });
+  }
+
+  createBygoogle(email: string, providerId: string): Promise<User> {
+    return this.prisma.user.create({
+      data: {
+        email,
+        emailVerified: new Date(),
+        providerAccounts: {
+          create: {
+            provider: PROVIDER.GOOGLE,
+            providerId,
+            type: PROVIDER_TYPE.OAUTH,
+          },
+        },
+      },
     });
   }
 }

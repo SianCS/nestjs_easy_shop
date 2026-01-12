@@ -3,9 +3,12 @@ import { AppModule } from "./app.module";
 import { Logger } from "@nestjs/common/services/logger.service";
 import { BaseHttpFilter } from "./common/filters/base-http.filter";
 import { GlobalValidationPipe } from "./common/pipes/globle-validation.pipe";
+import cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
 
   app.useGlobalPipes(new GlobalValidationPipe());
   app.useGlobalFilters(new BaseHttpFilter());

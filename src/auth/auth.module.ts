@@ -5,10 +5,20 @@ import { UsersModule } from "src/users/users.module";
 import { SecurityModule } from "src/shared/security/security.module";
 import { EmailVerificationTokenService } from "./services/email-verification-token.service";
 import { EmailModule } from "src/shared/email/email.module";
+import { GoogleController } from "./controllers/google.controller";
+import { GoogleStrategy } from "./strategies/google.strategy";
+import { GoogleUserValidator } from "./validators/google-user.validator";
+import { GoogleService } from "./services/google.service";
 
 @Module({
   imports: [UsersModule, SecurityModule, EmailModule],
-  controllers: [CredentialsController],
-  providers: [CredentialsService, EmailVerificationTokenService],
+  controllers: [CredentialsController, GoogleController],
+  providers: [
+    CredentialsService,
+    EmailVerificationTokenService,
+    GoogleStrategy,
+    GoogleUserValidator,
+    GoogleService,
+  ],
 })
 export class AuthModule {}
