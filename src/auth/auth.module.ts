@@ -9,6 +9,7 @@ import { GoogleController } from "./controllers/google.controller";
 import { GoogleStrategy } from "./strategies/google.strategy";
 import { GoogleUserValidator } from "./validators/google-user.validator";
 import { GoogleService } from "./services/google.service";
+import { JwtStrategy } from "./strategies/jwt.strategy";
 
 @Module({
   imports: [UsersModule, SecurityModule, EmailModule],
@@ -19,6 +20,7 @@ import { GoogleService } from "./services/google.service";
     GoogleStrategy,
     GoogleUserValidator,
     GoogleService,
+    JwtStrategy,
   ],
 })
 export class AuthModule {}
