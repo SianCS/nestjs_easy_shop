@@ -7,6 +7,7 @@ import { EmailDto } from "../dtos/email.dto";
 import { LoginDto } from "../dtos/login.dto";
 import { LoginResponseDto } from "../dtos/login-response.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
+import { Public } from "../decorators/public.decorator";
 @Controller("auth")
 export class CredentialsController {
   constructor(private readonly credentialsService: CredentialsService) {}
@@ -36,6 +37,7 @@ export class CredentialsController {
   }
 
   @ApiOkResponse({ type: LoginResponseDto })
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post("login")
   async login(
