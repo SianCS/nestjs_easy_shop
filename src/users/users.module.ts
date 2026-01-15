@@ -3,9 +3,10 @@ import { UsersService } from "./users.service";
 import { SecurityModule } from "src/shared/security/security.module";
 import { ProviderAccountService } from "./services/provider-account.service";
 import { UsersController } from "./users.controller";
+import { UploadModule } from "src/shared/upload/upload.module";
 
 @Module({
-  imports: [SecurityModule],
+  imports: [SecurityModule, UploadModule],
   providers: [UsersService, ProviderAccountService],
   exports: [UsersService, ProviderAccountService],
   controllers: [UsersController],

@@ -13,12 +13,16 @@ import { EmailAlreadyExistException } from "./exceptions/email-already-exist.exc
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { UserUpdateInput } from "./types/input.type";
 import { ProviderAccount } from "generated/prisma";
+import { CloudinaryService } from "src/shared/upload/cloudinary.service";
+import { ImageService } from "src/shared/upload/image.service";
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly bcryptService: BcryptService,
     private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly imageService: ImageService,
   ) {}
 
   async createByCredentials(registerDto: RegisterDto): Promise<User> {
@@ -101,5 +105,27 @@ export class UsersService {
         },
       },
     });
+  }
+
+  async updateProfile(id: string, file: Express.Multer.File): Promise<string> {
+    const { public_id: publicId, secure_url: url } =
+      await this.cloudinaryService.uploadFile(file);
+
+    await this.update(id, { image: url });
+    const images = await this.imageService.find("user", id);
+    if (images.length > 0) {
+      await Promise.all(
+        images.map((image) => this.cloudinaryService.delete(image.publicId)),
+      );
+      await this.imageService.delete("user", id);
+    }
+    await this.imageService.create({
+      url,
+      publicId,
+      owner: "user",
+      ownerId: id,
+    });
+
+    return url;
   }
 }

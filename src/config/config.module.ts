@@ -29,6 +29,7 @@ import { CloudinaryConfigService } from "./services/cloudinary-config.service";
     AppConfigService,
     MailerConfigService,
     GoogleConfigService,
+    CloudinaryConfigService,
   ],
 })
 export class ConfigModule {}
