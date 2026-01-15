@@ -4,12 +4,14 @@ import { jwtSchema } from "./jwt.schema";
 import { authSchema } from "./auth.schema";
 import { mailerSchema } from "./mailer.schema";
 import { googleSehema } from "./google.schema";
+import { couldinarySchema } from "./cloudinary.schema";
 
 export const envSehema = baseSchema
   .and(jwtSchema)
   .and(authSchema)
   .and(mailerSchema)
-  .and(googleSehema);
+  .and(googleSehema)
+  .and(couldinarySchema);
 
 export type EnvConfig = z.infer<typeof envSehema>;
 
