@@ -3,7 +3,7 @@ import { RegisterDto } from "../dtos/register.dto";
 import { UsersService } from "src/users/users.service";
 import { EmailVerificationTokenService } from "./email-verification-token.service";
 import { AppConfigService } from "src/config/services/app-config.service";
-import { FRONTEND_ROUTE } from "src/common/constants/froentend-route.constant";
+import { FRONTEND_ROUTE } from "src/common/constants/frontend-route.constant";
 import { EmailService } from "src/shared/email/email.service";
 import { InvalidVerificationTokenException } from "../exceptions/invalid-verification-token.exception";
 import { User } from "@prisma/client";
@@ -11,7 +11,7 @@ import { LoginDto } from "../dtos/login.dto";
 import { LoginResponseDto } from "../dtos/login-response.dto";
 import { InvalidCredentialsException } from "../exceptions/invalid-credentials.exception";
 import { BcryptService } from "src/shared/security/services/bcrypt.service";
-import { EmailNotVerifiedException } from "../exceptions/email-notveridied.exception";
+import { EmailNotVerifiedException } from "../exceptions/email-not-verified.exception";
 import { AuthTokenService } from "src/shared/security/services/auth-token.service";
 @Injectable()
 export class CredentialsService {

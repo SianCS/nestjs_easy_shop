@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { GoogleUserDto } from "../dtos/google-user.dto";
 import { validate } from "class-validator";
-import { InvalidGoogleProfileException } from "../exceptions/invalid-google-profile.exctption";
+import { InvalidGoogleProfileException } from "../exceptions/invalid-google-profile.exception";
 
 @Injectable()
 export class GoogleUserValidator {
