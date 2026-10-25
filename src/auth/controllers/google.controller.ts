@@ -11,7 +11,9 @@ import { GoogleUser } from "../decorators/google-user.decorator";
 import type { Response } from "express";
 import { GoogleService } from "../services/google.service";
 import { AppConfigService } from "src/config/services/app-config.service";
+import { Public } from "../decorators/public.decorator";
 
+@Public()
 @Controller("auth/google")
 export class GoogleController {
   constructor(

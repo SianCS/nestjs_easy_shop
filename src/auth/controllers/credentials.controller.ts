@@ -8,6 +8,9 @@ import { LoginDto } from "../dtos/login.dto";
 import { LoginResponseDto } from "../dtos/login-response.dto";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { Public } from "../decorators/public.decorator";
+
+// JwtAuthGuard เป็น global guard ทุก route ในนี้ต้องเรียกได้โดยยังไม่ login
+@Public()
 @Controller("auth")
 export class CredentialsController {
   constructor(private readonly credentialsService: CredentialsService) {}
@@ -37,7 +40,6 @@ export class CredentialsController {
   }
 
   @ApiOkResponse({ type: LoginResponseDto })
-  @Public()
   @HttpCode(HttpStatus.OK)
   @Post("login")
   async login(
