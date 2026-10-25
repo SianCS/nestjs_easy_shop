@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ProviderAccount } from "generated/prisma";
+import { ProviderAccount } from "@prisma/client";
 import {
   Provider,
   ProviderType,

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { EmailVerificationToken, User } from "@prisma/client";
+import { EmailVerificationToken, ProviderAccount, User } from "@prisma/client";
 import { RegisterDto } from "src/auth/dtos/register.dto";
 import {
   Provider,
@@ -12,7 +12,6 @@ import { BcryptService } from "src/shared/security/services/bcrypt.service";
 import { EmailAlreadyExistException } from "./exceptions/email-already-exist.exception";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { UserUpdateInput } from "./types/input.type";
-import { ProviderAccount } from "generated/prisma";
 import { CloudinaryService } from "src/shared/upload/cloudinary.service";
 import { ImageService } from "src/shared/upload/image.service";
 
